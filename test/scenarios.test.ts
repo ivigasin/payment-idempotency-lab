@@ -67,6 +67,18 @@ describe('same key, different request', () => {
   });
 });
 
+describe('the bank answers a repeated reference with "duplicate"', () => {
+  it('v3 does not guess from the error; it asks for the status and learns the transfer was booked', async () => {
+    const bank = bankWith('lose-response');
+    const service = new SafePaymentService(bank);
+    await service.pay(req); // booked, response lost -> unknown
+    await expect(bank.transfer('ref_pay_1', 'acct_1', 100)).rejects.toThrow('duplicate reference');
+    await service.reconcile();
+    expect(service.outcome(req.key)).toBe('succeeded');
+    expect(bank.transfersTo('acct_1')).toBe(1);
+  });
+});
+
 describe('the request never reached the bank', () => {
   it('v3 sees the same timeout, asks the bank, and resends once with the same reference', async () => {
     const bank = bankWith('lose-request');

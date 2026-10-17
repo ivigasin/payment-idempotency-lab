@@ -131,9 +131,11 @@ export class SafePaymentService implements PaymentService {
       const status = await this.bank.status(payment.reference);
       if (status === 'booked') {
         payment.state = 'succeeded';
+      } else if (status === 'rejected') {
+        payment.state = 'failed';
       } else {
         // The bank has no record of this reference. Resending with the SAME reference
-        // is safe: if an earlier attempt lands late, the bank deduplicates it.
+        // is safe: the bank never processes one reference twice.
         await this.send(payment);
       }
     }
@@ -152,6 +154,7 @@ export class SafePaymentService implements PaymentService {
       payment.state = 'succeeded';
     } catch (e) {
       // A rejection is a known outcome. A timeout is not: the money may have moved.
+      // Neither is "duplicate reference": the bank has seen it, but did it book it?
       payment.state = e instanceof BankRejected ? 'failed' : 'unknown';
     }
   }
