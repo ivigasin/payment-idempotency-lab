@@ -60,9 +60,11 @@ What v3 adds on top of the key:
   I1 at-most-once: BROKEN after 3 scenario(s), shrunk 6 times
     scenario: {"intents":[{"amount":1,"retries":0,"duplicate":true},{"amount":1,"retries":0,"duplicate":false}],"bank":[]}
     I1 at-most-once (acct_0): money left the account 2 times
+    interleaving: 12 scheduled steps
   I2 agreement: BROKEN after 2 scenario(s), shrunk 5 times
     scenario: {"intents":[{"amount":1,"retries":0,"duplicate":false}],"bank":["lose-response"]}
     I2 agreement (acct_0): bank booked the transfer, service says it did not
+    interleaving: 3 scheduled steps
 ```
 
 The first scenario has a duplicate concurrent request and a bank that never fails
