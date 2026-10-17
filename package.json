@@ -1,0 +1,19 @@
+{
+  "name": "payment-idempotency-lab",
+  "version": "1.0.0",
+  "description": "Why an idempotency key alone does not prevent double payments",
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc -p .",
+    "demo": "tsx scripts/demo.ts"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "fast-check": "^4.10.2",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.5"
+  },
+  "type": "module"
+}
